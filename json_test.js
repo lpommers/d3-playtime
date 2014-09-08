@@ -47,7 +47,8 @@ function makeAllCircles(keywords){
                       .attr("cx", dimension/2)
                       .attr("cy", dimension/2)
                       .attr("r", dimension/2)
-                      .style("fill", circleColor);
+                      .style("fill", circleColor)
+                      .data(allReviews).enter();
   });
 }
 
