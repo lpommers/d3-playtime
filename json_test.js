@@ -23,20 +23,31 @@ function findKeyword (expression){
 
 //builds all the circles for all the keywords
 function makeAllCircles(keywords){
+  var circleColor;
   keywords.map(function(each){
-
     var allReviews = [];
+      //assign circle color depending how many times the keyword showed up
+     if (each.frequency < 100) {
+      circleColor = 'green';
+     } else if (each.frequency > 100 && each.frequency  < 200 ) {
+      circleColor = 'yellow';
+     } else if (each.frequency > 200) {
+      circleColor = 'red';
+     } else {
+      circleColor = 'blue';
+     }
+
+    //build svg and circle for each keyword
     allReviews.push(each.reviews);
     var dimension = each.frequency;
     d3.select("body").append("svg")
                       .attr("width", dimension)
-                      .attr("height", dimension)
+                      .attr("height", dimension + 40)
                       .append("circle")
                       .attr("cx", dimension/2)
                       .attr("cy", dimension/2)
                       .attr("r", dimension/2)
-                      .style("fill", "purple")
-                      .data(allReviews).enter();
+                      .style("fill", circleColor);
   });
 }
 
@@ -57,12 +68,15 @@ var keywords = [
     keyword: 'rides',
     reviews : findReviews(/rides/gi),
     frequency : findKeyword(/rides/gi)
+  },
+  {
+    keyword: 'queue',
+    reviews : findReviews(/queue/gi),
+    frequency : findKeyword(/queue/gi)
   }
 ];
 
-
-
-
+//builds all the circles
 makeAllCircles(keywords);
 
 //grab all the circles
