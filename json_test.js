@@ -45,13 +45,28 @@ function makeAllCircles(keywords){
     d3.select("svg").append("circle")
                       .attr("cx", dimension/2)
                       .attr("cy", dimension/2)
-                      .attr("r", dimension/2)
+                      .attr("r", dimension/4)
                       .style("fill", circleColor)
+                      .style('stroke', 'black')
                       .data(allReviews).enter();
 
 
   });
 
+}
+
+function allCircleData(keywords) {
+  var circleData = [];
+    for(var i = 0; i < keywords.length; i++ ){
+      var textData = {
+        'cy' : keywords[i].frequency,
+        'cx' : keywords[i].frequency,
+        'r' : keywords[i].frequency /2,
+        'text' : keywords[i].keyword + " " + keywords[i].frequency
+      };
+    circleData.push(textData);
+  }
+  return circleData;
 }
 
 //console.log(document.querySelector('circle').__data__);
@@ -77,6 +92,16 @@ var keywords = [
     keyword: 'queue',
     reviews : findReviews(/queue/gi),
     frequency : findKeyword(/queue/gi)
+  },
+  {
+    keyword: 'beautiful',
+    reviews : findReviews(/beautiful/gi),
+    frequency : findKeyword(/beautiful/gi)
+  },
+  {
+    keyword: 'amazing',
+    reviews : findReviews(/amazing/gi),
+    frequency : findKeyword(/amazing/gi)
   }
 ];
 
@@ -84,28 +109,15 @@ var keywords = [
 //builds all the circles
 makeAllCircles(keywords);
 
+//make the text for each circle
+d3.select('svg').selectAll('text')
+        .data(allCircleData(keywords)).enter()
+        .append('text')
+        .text(function(d){return d.text})
+        .attr('x', function(d) {return (d.cx /2) - 9})
+        .attr('y', function(s){return (s.cx /2) + 5});
 
 
-
-
-
-var keys = [];
-for (var i = 0; i < keywords.length; i ++){
-  keys.push(keywords[i].keyword);
-}
-
-var circleData = [];
-for(var i = 0; i < keywords.length; i++ ){
-  var textData = {
-    'cy' : keywords[i].frequency,
-    'cx' : keywords[i].frequency,
-    'r' : keywords[i].frequency /2,
-  };
-  circleData.push(textData);
-
-}
-
-d3.select('svg').selectAll('text').data(circleData).enter().append('text').text(function(d){return d.cy}).attr('x', function(d) {return d.cx}).attr('y', function(s){return s.cx});
 console.log(document.querySelectorAll('text'));
 
 
@@ -113,7 +125,6 @@ console.log(document.querySelectorAll('text'));
 
 //grab all the circles
 var circles = document.getElementsByTagName('circle');
-
 //for each circle
 for(var i = 0; i < circles.length; i++) {
   //add click event
@@ -131,11 +142,3 @@ for(var i = 0; i < circles.length; i++) {
   });
 }
 
-//console.log(d3.selectAll('circle'))
-
-// d3.selectAll('svg').append('text')
-//                     .attr('x', 20)
-//                     .attr('y', 40)
-//                     .attr('fill', 'blue')
-//                     .selectAll('text')
-//                     .text('something');
