@@ -24,6 +24,7 @@ function findKeyword (expression){
 //builds all the circles for all the keywords
 function makeAllCircles(keywords){
   var circleColor;
+  d3.select('body').append('svg').attr('height', 1000).attr('width', 1000);
   keywords.map(function(each){
     var allReviews = [];
       //assign circle color depending how many times the keyword showed up
@@ -39,19 +40,21 @@ function makeAllCircles(keywords){
 
     //build svg and circle for each keyword
     allReviews.push(each.reviews);
+    //console.log(allReviews);
     var dimension = each.frequency;
-    d3.select("body").append("svg")
-                      .attr("width", dimension)
-                      .attr("height", dimension + 40)
-                      .append("circle")
+    d3.select("svg").append("circle")
                       .attr("cx", dimension/2)
                       .attr("cy", dimension/2)
                       .attr("r", dimension/2)
                       .style("fill", circleColor)
                       .data(allReviews).enter();
+
+
   });
+
 }
 
+//console.log(document.querySelector('circle').__data__);
 
 //an array of keywords that also holds how many times that keyword showed up and all the reviews in which it did show up
 var keywords = [
@@ -77,8 +80,36 @@ var keywords = [
   }
 ];
 
+
 //builds all the circles
 makeAllCircles(keywords);
+
+
+
+
+
+
+var keys = [];
+for (var i = 0; i < keywords.length; i ++){
+  keys.push(keywords[i].keyword);
+}
+
+var circleData = [];
+for(var i = 0; i < keywords.length; i++ ){
+  var textData = {
+    'cy' : keywords[i].frequency,
+    'cx' : keywords[i].frequency,
+    'r' : keywords[i].frequency /2,
+  };
+  circleData.push(textData);
+
+}
+
+d3.select('svg').selectAll('text').data(circleData).enter().append('text').text(function(d){return d.cy}).attr('x', function(d) {return d.cx}).attr('y', function(s){return s.cx});
+console.log(document.querySelectorAll('text'));
+
+
+
 
 //grab all the circles
 var circles = document.getElementsByTagName('circle');
@@ -100,6 +131,11 @@ for(var i = 0; i < circles.length; i++) {
   });
 }
 
+//console.log(d3.selectAll('circle'))
 
-console.log(d3.selectAll('circle'))
-
+// d3.selectAll('svg').append('text')
+//                     .attr('x', 20)
+//                     .attr('y', 40)
+//                     .attr('fill', 'blue')
+//                     .selectAll('text')
+//                     .text('something');
